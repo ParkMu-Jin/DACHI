@@ -2,7 +2,7 @@
 <html class="light" lang="es"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>DACHI | Agro-Tech de Excelencia</title>
+<title>DACHI | Catálogo de Productos</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
@@ -80,14 +80,14 @@
 <span class="font-headline-sm text-headline-sm font-bold text-primary hidden sm:inline">DACHI</span>
 </a>
 <nav class="hidden md:flex gap-6">
-<a class="font-label-md text-label-md text-primary border-b-2 border-primary pb-1" href="#home">Inicio</a>
-<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="catalogo.html">Catálogo</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="home.html">Inicio</a>
+<a class="font-label-md text-label-md text-primary border-b-2 border-primary pb-1" href="catalogo.html">Catálogo</a>
 </nav>
 </div>
 <div class="flex items-center gap-4">
 <div class="relative hidden lg:block">
 <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
-<input class="pl-10 pr-4 py-2 bg-surface-container-low/50 border border-outline-variant/50 rounded-full focus:ring-1 focus:ring-primary focus:border-primary w-64 text-label-md transition-all" id="navSearch" onkeydown="if(event.key==='Enter'){location.href='catalogo.html?q='+encodeURIComponent(this.value);}" placeholder="Buscar productos..." type="text"/>
+<input class="pl-10 pr-4 py-2 bg-surface-container-low/50 border border-outline-variant/50 rounded-full focus:ring-1 focus:ring-primary focus:border-primary w-64 text-label-md transition-all" id="navSearch" oninput="applyFilters()" placeholder="Buscar productos..." type="text"/>
 </div>
 <button class="p-2 rounded-full hover:bg-surface-container-low text-on-surface-variant relative transition-colors" onclick="toggleCart()">
 <span class="material-symbols-outlined">shopping_cart</span>
@@ -141,65 +141,41 @@
 </button>
 </div>
 <nav class="flex flex-col gap-4">
-<a class="flex items-center gap-3 p-3 rounded-xl bg-primary/10 text-primary font-bold" href="#home" onclick="toggleMobileMenu()">
+<a class="flex items-center gap-3 p-3 rounded-xl text-on-surface-variant hover:bg-surface-container-low" href="home.html" onclick="toggleMobileMenu()">
 <span class="material-symbols-outlined">home</span> Inicio
         </a>
-<a class="flex items-center gap-3 p-3 rounded-xl text-on-surface-variant hover:bg-surface-container-low" href="catalogo.html" onclick="toggleMobileMenu()">
+<a class="flex items-center gap-3 p-3 rounded-xl bg-primary/10 text-primary font-bold" href="catalogo.html" onclick="toggleMobileMenu()">
 <span class="material-symbols-outlined">grid_view</span> Catálogo
         </a>
 </nav>
 </div>
 <main class="max-w-container-max mx-auto">
-<!-- BLOQUE HERO -->
-<section class="relative h-[80vh] flex items-center overflow-hidden bg-primary-container" id="home">
-<div class="absolute inset-0 z-0">
-<img class="w-full h-full object-cover opacity-60" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBX1AOkwmXOiueMSGckEkeerPQciffwVDfNEcaQ8i9tp4XJcKRCVFgyhO0n4_-u1ETeDmdAoTXHM4FKpogMwGQBZf4onyG78n54JyH6elsQkKQlTyOAMYS7wQorJmwPaASMVPRrkwXkIBEwBAXHnr4yBTQek6VLZO_khe-wL3Tbfkc2nXiSMxvAWSFuCkpTIxqTRZEaMwae8YWL7GWRcMhIcwGod00YDnEf-fE9uRyXQr8Tk8LBmuZmUKtAR94hGYfIw40BiHCFeA"/>
-</div>
-<div class="relative z-10 px-margin-desktop w-full max-w-4xl">
-<span class="inline-block px-4 py-1 bg-secondary-container text-on-secondary-container font-label-md text-label-md rounded-full mb-6 uppercase tracking-widest">Excelencia Panameña</span>
-<h1 class="font-display-lg text-display-lg text-white mb-8 leading-tight">
-                Cultivando la Confianza del <span class="text-secondary-fixed">Campo a su Mesa</span>
-</h1>
-<p class="font-body-lg text-body-lg text-surface-container-highest mb-12 max-w-2xl">
-                Conectamos la precisión tecnológica con la sabiduría ancestral del agro panameño para entregar productos de calidad insuperable.
-            </p>
-<div class="flex flex-wrap gap-4">
-<button class="bg-primary-fixed text-on-primary-fixed px-8 py-4 rounded-xl font-bold font-label-md text-label-md hover:bg-primary-fixed-dim transition-all forest-shadow-active active:scale-95" onclick="location.href='catalogo.html'">
-                    Explorar Catálogo
-                </button>
+<!-- BLOQUE ENCABEZADO CATALOGO -->
+<section class="px-margin-desktop pt-stack-xl pb-stack-md" id="home">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
+<div>
+<span class="inline-block px-4 py-1 bg-secondary-container text-on-secondary-container font-label-md text-label-md rounded-full mb-4 uppercase tracking-widest">Catálogo Completo</span>
+<h1 class="font-headline-md text-headline-md text-primary mb-2">Todos los Productos</h1>
+<p class="text-on-surface-variant max-w-md">Explora la selección completa de productores panameños en DACHI.</p>
 </div>
 </div>
 </section>
-<!-- BLOQUE CARRUSEL OFERTAS -->
-<section class="px-margin-desktop py-stack-xl" id="ofertas">
-<div class="flex justify-between items-end mb-8 gap-4">
-<div>
-<span class="inline-block px-3 py-1 bg-error/10 text-error font-label-sm text-label-sm rounded-full mb-2 uppercase tracking-widest">Por tiempo limitado</span>
-<h2 class="font-headline-md text-headline-md text-primary">Ofertas Especiales</h2>
+<!-- BLOQUE CATALOGO -->
+<section class="px-margin-desktop py-stack-xl" id="catalog">
+<!-- BLOQUE FILTROS -->
+<div class="flex flex-wrap gap-3 mb-10" id="filterBar">
+<select class="bg-surface-container-low border border-outline-variant/50 rounded-xl px-4 py-2 font-label-md text-label-md outline-none focus:border-primary" id="filterCategory" onchange="applyFilters()">
+<option value="">Todas las Categorías</option>
+</select>
+<select class="bg-surface-container-low border border-outline-variant/50 rounded-xl px-4 py-2 font-label-md text-label-md outline-none focus:border-primary" id="filterZone" onchange="applyFilters()">
+<option value="">Todas las Zonas</option>
+</select>
+<button class="text-secondary font-bold text-label-md flex items-center gap-1" onclick="clearFilters()">
+<span class="material-symbols-outlined text-[18px]">filter_alt_off</span> Limpiar
+</button>
 </div>
-<div class="hidden sm:flex gap-2">
-<button class="p-2 rounded-full border border-outline-variant hover:bg-surface-container-low" onclick="scrollCarousel('carousel-ofertas', -1)"><span class="material-symbols-outlined">chevron_left</span></button>
-<button class="p-2 rounded-full border border-outline-variant hover:bg-surface-container-low" onclick="scrollCarousel('carousel-ofertas', 1)"><span class="material-symbols-outlined">chevron_right</span></button>
-</div>
-</div>
-<div class="flex gap-6 overflow-x-auto scrollbar-hide scroll-smooth snap-x pb-2" id="carousel-ofertas"></div>
-</section>
-<!-- BLOQUE CARRUSEL ESPECIALES -->
-<section class="px-margin-desktop py-stack-xl bg-surface-container-low/50">
-<div class="flex justify-between items-end mb-8 gap-4">
-<div>
-<span class="inline-block px-3 py-1 bg-secondary-container text-on-secondary-container font-label-sm text-label-sm rounded-full mb-2 uppercase tracking-widest">Selección Curada</span>
-<h2 class="font-headline-md text-headline-md text-primary">Productos Especiales</h2>
-</div>
-<div class="hidden sm:flex gap-2">
-<button class="p-2 rounded-full border border-outline-variant hover:bg-surface-container-low" onclick="scrollCarousel('carousel-especiales', -1)"><span class="material-symbols-outlined">chevron_left</span></button>
-<button class="p-2 rounded-full border border-outline-variant hover:bg-surface-container-low" onclick="scrollCarousel('carousel-especiales', 1)"><span class="material-symbols-outlined">chevron_right</span></button>
-</div>
-</div>
-<div class="flex gap-6 overflow-x-auto scrollbar-hide scroll-smooth snap-x pb-2" id="carousel-especiales"></div>
-<div class="text-center mt-10">
-<button class="border-2 border-primary text-primary px-8 py-3 rounded-xl font-bold font-label-md text-label-md hover:bg-primary hover:text-white transition-all" onclick="location.href='catalogo.html'">Ver Catálogo Completo</button>
-</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="product-grid"></div>
+<p class="hidden text-center py-16 text-on-surface-variant" id="noResults">No se encontraron productos con esos filtros.</p>
 </section>
 <!-- BLOQUE SETTINGS -->
 </main>
@@ -525,52 +501,75 @@ let currentDetailId = null;
 function init() {
     applyAjustes();
     refreshAvatarUI();
-    renderOfertas();
-    renderEspeciales();
+    populateFilters();
+    const params = new URLSearchParams(window.location.search);
+    const q = params.get('q');
+    if (q) document.getElementById('navSearch').value = q;
+    renderCatalog();
     updateCartUI();
     renderOrders();
 }
 
-function productCardHTML(p) {
-    const avgRating = getAvgRating(p);
-    const img = (p.images && p.images[0]) || 'https://picsum.photos/seed/dachi-default/400/300';
-    return `
-    <div class="glass-card rounded-3xl overflow-hidden forest-shadow group hover:forest-shadow-active transition-all flex flex-col cursor-pointer flex-none w-64 snap-start" onclick="openProductDetail('${p.id}')">
-        <div class="h-40 overflow-hidden relative">
-            <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="${img}"/>
-            <span class="absolute top-3 left-3 bg-white/90 text-primary px-2 py-0.5 rounded-full text-[10px] font-bold uppercase">${p.zone || 'Panamá'}</span>
-        </div>
-        <div class="p-5 flex flex-1 flex-col">
-            <h4 class="font-label-md text-label-md text-on-surface mb-1 line-clamp-1">${p.name}</h4>
-            <p class="text-on-surface-variant text-label-sm mb-2">${p.category || ''}</p>
-            <div class="flex items-center gap-1 mb-4">${starsHtml(avgRating)}<span class="text-label-sm text-on-surface-variant ml-1">(${avgRating.toFixed(1)})</span></div>
-            <div class="mt-auto flex items-center justify-between">
-                <span class="text-primary font-bold">$${parseFloat(p.price).toFixed(2)}</span>
-                <button class="p-2 bg-surface-container-low text-primary rounded-lg hover:bg-primary hover:text-white transition-all" onclick="event.stopPropagation(); quickAdd('${p.id}')">
-                    <span class="material-symbols-outlined">add</span>
-                </button>
+// BLOQUE FILTROS
+function populateFilters() {
+    const products = getProducts().filter(p => p.status === 'active');
+    const cats = [...new Set(products.map(p => p.category).filter(Boolean))];
+    const zones = [...new Set(products.map(p => p.zone).filter(Boolean))];
+    const catSel = document.getElementById('filterCategory');
+    const zoneSel = document.getElementById('filterZone');
+    catSel.innerHTML = '<option value="">Todas las Categorías</option>' + cats.map(c => `<option value="${c}">${c}</option>`).join('');
+    zoneSel.innerHTML = '<option value="">Todas las Zonas</option>' + zones.map(z => `<option value="${z}">${z}</option>`).join('');
+}
+function clearFilters() {
+    document.getElementById('filterCategory').value = '';
+    document.getElementById('filterZone').value = '';
+    document.getElementById('navSearch').value = '';
+    renderCatalog();
+}
+function applyFilters() { renderCatalog(); }
+
+// BLOQUE RENDER CATALOGO
+function renderCatalog() {
+    const grid = document.getElementById('product-grid');
+    const noResults = document.getElementById('noResults');
+    const cat = document.getElementById('filterCategory').value;
+    const zone = document.getElementById('filterZone').value;
+    const search = (document.getElementById('navSearch').value || '').toLowerCase();
+
+    let products = getProducts().filter(p => p.status === 'active');
+    if (cat) products = products.filter(p => p.category === cat);
+    if (zone) products = products.filter(p => p.zone === zone);
+    if (search) products = products.filter(p => p.name.toLowerCase().includes(search));
+
+    if (products.length === 0) {
+        grid.innerHTML = '';
+        noResults.classList.remove('hidden');
+        return;
+    }
+    noResults.classList.add('hidden');
+
+    grid.innerHTML = products.map(p => {
+        const avgRating = getAvgRating(p);
+        const img = (p.images && p.images[0]) || 'https://picsum.photos/seed/dachi-default/400/300';
+        return `
+        <div class="glass-card rounded-3xl overflow-hidden forest-shadow group hover:forest-shadow-active transition-all flex flex-col cursor-pointer" onclick="openProductDetail('${p.id}')">
+            <div class="h-48 overflow-hidden relative">
+                <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="${img}"/>
+                <span class="absolute top-3 left-3 bg-white/90 text-primary px-2 py-0.5 rounded-full text-[10px] font-bold uppercase">${p.zone || 'Panamá'}</span>
             </div>
-        </div>
-    </div>`;
-}
-
-// BLOQUE CARRUSEL OFERTAS (productos con más ventas = mejor precio-demanda)
-function renderOfertas() {
-    const container = document.getElementById('carousel-ofertas');
-    const products = getProducts().filter(p => p.status === 'active').slice().sort((a, b) => (b.sold || 0) - (a.sold || 0)).slice(0, 8);
-    container.innerHTML = products.map(productCardHTML).join('') || '<p class="text-on-surface-variant">No hay ofertas disponibles por el momento.</p>';
-}
-
-// BLOQUE CARRUSEL PRODUCTOS ESPECIALES (mejor calificados)
-function renderEspeciales() {
-    const container = document.getElementById('carousel-especiales');
-    const products = getProducts().filter(p => p.status === 'active').slice().sort((a, b) => getAvgRating(b) - getAvgRating(a)).slice(0, 8);
-    container.innerHTML = products.map(productCardHTML).join('') || '<p class="text-on-surface-variant">No hay productos especiales por el momento.</p>';
-}
-
-function scrollCarousel(id, dir) {
-    const el = document.getElementById(id);
-    el.scrollBy({ left: dir * 320, behavior: 'smooth' });
+            <div class="p-6 flex flex-1 flex-col">
+                <h4 class="font-label-md text-label-md text-on-surface mb-1">${p.name}</h4>
+                <p class="text-on-surface-variant text-label-sm mb-2">${p.category || ''}</p>
+                <div class="flex items-center gap-1 mb-4">${starsHtml(avgRating)}<span class="text-label-sm text-on-surface-variant ml-1">(${avgRating.toFixed(1)})</span></div>
+                <div class="mt-auto flex items-center justify-between">
+                    <span class="text-primary font-bold">$${parseFloat(p.price).toFixed(2)}</span>
+                    <button class="p-2 bg-surface-container-low text-primary rounded-lg hover:bg-primary hover:text-white transition-all" onclick="event.stopPropagation(); quickAdd('${p.id}')">
+                        <span class="material-symbols-outlined">add</span>
+                    </button>
+                </div>
+            </div>
+        </div>`;
+    }).join('');
 }
 
 function starsHtml(rating) {
@@ -662,7 +661,7 @@ function rateProduct(id, stars) {
     else p.ratings.push({ email: session.email, stars: stars });
     saveProducts(products);
     openProductDetail(id);
-    renderOfertas(); renderEspeciales();
+    renderCatalog();
 }
 
 // BLOQUE COMENTARIOS
@@ -782,7 +781,7 @@ function checkout() {
     cart = [];
     saveCart();
     updateCartUI();
-    renderOfertas(); renderEspeciales();
+    renderCatalog();
     renderOrders();
     toggleCart();
     alert('¡Pedido realizado con éxito! Puedes ver el estado en Mis Pedidos.');
