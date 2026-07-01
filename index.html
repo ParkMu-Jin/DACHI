@@ -41,21 +41,21 @@ try {
 } catch (_e) {}
 </script>
 </head>
-<body class="bg-background text-on-background font-body-md min-h-screen overflow-x-hidden">
-<main class="flex flex-col md:flex-row min-h-screen">
+<body class="bg-background text-on-background font-body-md h-screen overflow-hidden">
+<main class="flex flex-col md:flex-row h-full">
 
 <!-- BLOQUE VISUAL -->
 <section class="hidden md:flex relative md:w-1/2 lg:w-3/5 overflow-hidden">
 <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('img/Fond.png?v=2')"></div>
 <div class="absolute inset-0 bg-black/40 backdrop-blur-[1px] flex flex-col items-center justify-center p-margin-desktop text-white text-center">
-<div class="flex-1 flex flex-col items-center justify-center">
-<img alt="DACHI Logo" class="h-64 md:h-80 w-auto object-contain brightness-0 invert mb-stack-lg" src="img/LG.png?v=2"/>
+<div class="flex-1 flex flex-col items-center justify-center min-h-0">
+<img alt="DACHI Logo" class="h-48 lg:h-64 xl:h-80 w-auto object-contain brightness-0 invert mb-stack-lg" src="img/LG.png?v=2"/>
 <div class="max-w-md">
 <h1 class="font-headline-sm text-[20px] md:text-headline-sm mb-stack-sm leading-tight opacity-90">Del campo panameño directo a tu mesa, sin intermediarios</h1>
 <p class="font-body-md text-body-md opacity-85 max-w-xs mx-auto">Conectando productores locales con tecnología de vanguardia para garantizar frescura y calidad.</p>
 </div>
 </div>
-<div class="flex gap-stack-md justify-center mt-auto">
+<div class="flex gap-stack-md justify-center mt-auto flex-none">
 <div class="flex items-center gap-2 bg-white/10 backdrop-blur-md px-4 py-2 rounded-full border border-white/20">
 <span class="material-symbols-outlined text-secondary-fixed">verified</span>
 <span class="font-label-sm text-label-sm">100% Orgánico</span>
@@ -69,15 +69,16 @@ try {
 </section>
 
 <!-- BLOQUE AUTH -->
-<section class="flex-1 flex p-margin-mobile md:p-margin-desktop bg-surface overflow-hidden">
-<div class="w-full max-w-md py-stack-lg mx-auto flex flex-col">
+<section class="flex-1 flex p-margin-mobile md:p-margin-desktop bg-surface overflow-hidden h-full min-h-0">
+<div class="w-full max-w-md py-stack-sm md:py-stack-lg mx-auto flex flex-col h-full min-h-0">
 
-<div class="md:hidden flex flex-col items-center mb-stack-xl">
-<img alt="DACHI Logo" class="h-20 w-auto mb-stack-sm" src="img/LG.png?v=2"/>
+<div class="md:hidden flex flex-col items-center mb-stack-sm flex-none">
+<img alt="DACHI Logo" class="h-14 w-auto mb-1" src="img/LG.png?v=2"/>
 <h2 class="font-headline-sm text-headline-sm text-primary">Cultivando Confianza</h2>
 </div>
 
 <div class="bg-surface-container-lowest rounded-2xl p-stack-lg border border-outline-variant/30 shadow-sm flex flex-col flex-1 min-h-0">
+
 
 <!-- BLOQUE TABS -->
 <div class="flex border-b border-outline-variant mb-stack-lg flex-none" id="authTabs">
@@ -176,16 +177,7 @@ try {
 </div>
 
 </div>
-<div class="mt-stack-lg p-4 bg-surface-container-low rounded-xl border border-outline-variant/30">
-<p class="font-label-sm text-label-sm text-primary font-bold mb-2 text-center">CUENTAS DE PRUEBA (contraseña: dachi2024)</p>
-<div class="grid grid-cols-2 gap-x-4 gap-y-1 text-[11px] text-on-surface-variant">
-<p><b>Admin:</b> corea@gmail.com</p>
-<p><b>Logística:</b> fulo@gmail.com</p>
-<p><b>Consumidor:</b> sara@gmail.com</p>
-<p><b>Productor:</b> ar@gmail.com</p>
-</div>
-</div>
-<footer class="mt-stack-lg text-center">
+<footer class="mt-stack-sm text-center flex-none">
 <p class="font-label-sm text-label-sm text-on-surface-variant">© 2024 DACHI. Cultivando confianza en Panamá.</p>
 </footer>
 </div>
