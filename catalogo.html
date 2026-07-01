@@ -486,6 +486,18 @@ function seedDemoData() {
     localStorage.setItem('dachi_products', JSON.stringify(demoProducts));
 }
 seedDemoData();
+function seedDemoOrders() {
+    if (localStorage.getItem('dachi_orders')) return;
+    const demoOrders = [
+        { id: '1000001', buyerEmail: 'sara@gmail.com', buyerName: 'Sara', items: [{ id: 'seed1', name: 'Tomate Chonto Orgánico', price: 1.25, qty: 4, image: '' }], total: 5.00, date: new Date().toLocaleString('es-PA'), status: 'pendiente' },
+        { id: '1000002', buyerEmail: 'maria@gmail.com', buyerName: 'María González', items: [{ id: 'seed2', name: 'Café Geisha Especial', price: 18.50, qty: 1, image: '' }], total: 18.50, date: new Date().toLocaleString('es-PA'), status: 'en camino', repartidorEmail: 'fulo@gmail.com' },
+        { id: '1000003', buyerEmail: 'sara@gmail.com', buyerName: 'Sara', items: [{ id: 'seed4', name: 'Cacao en Grano Fino de Aroma', price: 6.75, qty: 2, image: '' }], total: 13.50, date: new Date().toLocaleString('es-PA'), status: 'pendiente' },
+        { id: '1000004', buyerEmail: 'maria@gmail.com', buyerName: 'María González', items: [{ id: 'seed6', name: 'Plátano Verde', price: 0.60, qty: 10, image: '' }], total: 6.00, date: new Date().toLocaleString('es-PA'), status: 'pendiente' },
+        { id: '1000005', buyerEmail: 'sara@gmail.com', buyerName: 'Sara', items: [{ id: 'seed9', name: 'Naranja Valencia', price: 1.10, qty: 6, image: '' }], total: 6.60, date: new Date().toLocaleString('es-PA'), status: 'en camino', repartidorEmail: 'jose@gmail.com' }
+    ];
+    localStorage.setItem('dachi_orders', JSON.stringify(demoOrders));
+}
+seedDemoOrders();
 
 // BLOQUE PRODUCTOS
 function getProducts() {

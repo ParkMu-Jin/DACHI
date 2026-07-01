@@ -262,6 +262,33 @@
 </div>
 </section>
 
+<!-- BLOQUE ADMIN: MAPA DE RUTAS -->
+<section class="space-y-stack-lg hidden" id="sec-mapa">
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-gutter items-start">
+<div class="xl:col-span-2 glass-card rounded-[32px] shadow-forest p-gutter">
+<div class="flex justify-between items-center mb-4 flex-wrap gap-2">
+<h3 class="font-headline-sm text-primary text-[22px]">Mapa de Zonas y Rutas</h3>
+<button class="text-label-sm font-bold text-primary flex items-center gap-1 hidden" id="mapClearZone" onclick="selectMapZone(null)">
+<span class="material-symbols-outlined text-[18px]">close</span> Ver todas las zonas
+</button>
+</div>
+<p class="text-on-surface-variant text-label-sm mb-4">Cada punto representa una provincia con productores activos. El tamaño indica cuántas rutas próximas tiene. Haz clic en un punto para ver el detalle.</p>
+<div class="rounded-[24px] overflow-hidden border border-outline-variant/30 bg-gradient-to-br from-primary-fixed/10 to-secondary-fixed/10">
+<svg id="mapaSvg" viewBox="0 0 900 320" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto">
+<path d="M60,150 C120,80 220,60 320,100 C400,60 460,50 520,90 C620,60 720,90 840,160 C820,220 720,240 620,210 C560,250 460,260 400,220 C320,260 200,250 130,210 C80,200 50,180 60,150 Z" fill="currentColor" class="text-primary-fixed/25"/>
+<g id="mapaZonas"></g>
+</svg>
+</div>
+<div class="flex flex-wrap gap-3 mt-4" id="mapaLeyenda"></div>
+</div>
+<div class="glass-card rounded-[32px] shadow-forest p-gutter flex flex-col max-h-[560px]">
+<h3 class="font-headline-sm text-primary text-[20px] mb-1" id="mapaListTitle">Próximas Rutas</h3>
+<p class="text-on-surface-variant text-label-sm mb-4" id="mapaListSubtitle">Todas las zonas</p>
+<div class="space-y-3 overflow-y-auto pr-1" id="mapaRutasList"></div>
+</div>
+</div>
+</section>
+
 <!-- BLOQUE REPARTIDOR: DISPONIBLES -->
 <section class="space-y-stack-lg hidden" id="sec-disponibles">
 <div class="flex items-center justify-between mb-4">
@@ -412,6 +439,39 @@ function getProducts() { return JSON.parse(localStorage.getItem('dachi_products'
 function saveProducts(list) { localStorage.setItem('dachi_products', JSON.stringify(list)); }
 function getOrders() { return JSON.parse(localStorage.getItem('dachi_orders') || '[]'); }
 function saveOrders(list) { localStorage.setItem('dachi_orders', JSON.stringify(list)); }
+
+// BLOQUE DATOS DE PRUEBA (idempotente: solo siembra si no hay datos guardados)
+function seedDemoData() {
+    if (localStorage.getItem('dachi_products')) return;
+    const img = (seed) => `https://picsum.photos/seed/${seed}/600/450`;
+    const now = new Date().toLocaleDateString('es-PA');
+    const demoProducts = [
+        { id: 'seed1', name: 'Tomate Chonto Orgánico', price: '1.25', quantity: 80, category: 'Hortalizas', zone: 'Chiriquí', description: 'Tomates chonto cultivados sin pesticidas en las tierras altas de Chiriquí, cosechados semanalmente.', images: [img('tomate1'), img('tomate2')], status: 'active', producerEmail: 'ar@gmail.com', producerName: 'Ar', sold: 34, ratings: [{email:'sara@gmail.com',stars:5},{email:'maria@gmail.com',stars:4}], comments: [{email:'sara@gmail.com',nombre:'Sara',text:'Excelente calidad, muy frescos.',date:now}] },
+        { id: 'seed2', name: 'Café Geisha Especial', price: '18.50', quantity: 25, category: 'Café', zone: 'Chiriquí', description: 'Café Geisha de altura, tueste medio, notas florales y cítricas. Cosecha de Boquete.', images: [img('cafe1'), img('cafe2')], status: 'active', producerEmail: 'boquete@dachi.pa', producerName: 'Café Boquete Dorado', sold: 52, ratings: [{email:'sara@gmail.com',stars:5}], comments: [{email:'maria@gmail.com',nombre:'María González',text:'El mejor café que he probado en Panamá.',date:now}] },
+        { id: 'seed3', name: 'Piña Perolera', price: '2.10', quantity: 60, category: 'Frutas', zone: 'Colón', description: 'Piñas dulces y jugosas, cosechadas en su punto óptimo de maduración.', images: [img('pina1')], status: 'active', producerEmail: 'roble@dachi.pa', producerName: 'Finca Los Robles', sold: 21, ratings: [{email:'maria@gmail.com',stars:4}], comments: [] },
+        { id: 'seed4', name: 'Cacao en Grano Fino de Aroma', price: '6.75', quantity: 40, category: 'Cacao', zone: 'Darién', description: 'Cacao criollo fermentado y secado artesanalmente, ideal para chocolatería fina.', images: [img('cacao1'), img('cacao2')], status: 'active', producerEmail: 'darien@dachi.pa', producerName: 'Cacao Darién Orgánico', sold: 15, ratings: [{email:'sara@gmail.com',stars:5},{email:'maria@gmail.com',stars:5}], comments: [{email:'sara@gmail.com',nombre:'Sara',text:'Aroma increíble, se nota la calidad.',date:now}] },
+        { id: 'seed5', name: 'Ñame Criollo', price: '0.95', quantity: 100, category: 'Hortalizas', zone: 'Coclé', description: 'Ñame fresco cosechado en Coclé, ideal para sancocho.', images: [img('name1')], status: 'active', producerEmail: 'ar@gmail.com', producerName: 'Ar', sold: 44, ratings: [], comments: [] },
+        { id: 'seed6', name: 'Plátano Verde', price: '0.60', quantity: 150, category: 'Frutas', zone: 'Bocas del Toro', description: 'Plátanos verdes de exportación, cultivados en fincas familiares de Bocas del Toro.', images: [img('platano1')], status: 'active', producerEmail: 'roble@dachi.pa', producerName: 'Finca Los Robles', sold: 66, ratings: [{email:'maria@gmail.com',stars:4}], comments: [] },
+        { id: 'seed7', name: 'Miel de Abeja Pura', price: '8.00', quantity: 30, category: 'Artesanal', zone: 'Veraguas', description: 'Miel 100% pura extraída de forma artesanal en apiarios de Veraguas.', images: [img('miel1')], status: 'active', producerEmail: 'ar@gmail.com', producerName: 'Ar', sold: 19, ratings: [{email:'sara@gmail.com',stars:5}], comments: [] },
+        { id: 'seed8', name: 'Queso de Aro Artesanal', price: '5.40', quantity: 20, category: 'Especialidad', zone: 'Los Santos', description: 'Queso de aro tradicional, elaborado con leche fresca de Los Santos.', images: [img('queso1')], status: 'active', producerEmail: 'roble@dachi.pa', producerName: 'Finca Los Robles', sold: 12, ratings: [], comments: [] },
+        { id: 'seed9', name: 'Naranja Valencia', price: '1.10', quantity: 90, category: 'Frutas', zone: 'Panamá Oeste', description: 'Naranjas jugosas ideales para jugo, cultivadas en Panamá Oeste.', images: [img('naranja1')], status: 'active', producerEmail: 'darien@dachi.pa', producerName: 'Cacao Darién Orgánico', sold: 28, ratings: [{email:'maria@gmail.com',stars:4}], comments: [] },
+        { id: 'seed10', name: 'Yuca Fresca', price: '0.85', quantity: 120, category: 'Hortalizas', zone: 'Herrera', description: 'Yuca fresca recién cosechada, lista para tu mesa.', images: [img('yuca1')], status: 'active', producerEmail: 'ar@gmail.com', producerName: 'Ar', sold: 37, ratings: [], comments: [] }
+    ];
+    localStorage.setItem('dachi_products', JSON.stringify(demoProducts));
+}
+function seedDemoOrders() {
+    if (localStorage.getItem('dachi_orders')) return;
+    const demoOrders = [
+        { id: '1000001', buyerEmail: 'sara@gmail.com', buyerName: 'Sara', items: [{ id: 'seed1', name: 'Tomate Chonto Orgánico', price: 1.25, qty: 4, image: '' }], total: 5.00, date: new Date().toLocaleString('es-PA'), status: 'pendiente' },
+        { id: '1000002', buyerEmail: 'maria@gmail.com', buyerName: 'María González', items: [{ id: 'seed2', name: 'Café Geisha Especial', price: 18.50, qty: 1, image: '' }], total: 18.50, date: new Date().toLocaleString('es-PA'), status: 'en camino', repartidorEmail: 'fulo@gmail.com' },
+        { id: '1000003', buyerEmail: 'sara@gmail.com', buyerName: 'Sara', items: [{ id: 'seed4', name: 'Cacao en Grano Fino de Aroma', price: 6.75, qty: 2, image: '' }], total: 13.50, date: new Date().toLocaleString('es-PA'), status: 'pendiente' },
+        { id: '1000004', buyerEmail: 'maria@gmail.com', buyerName: 'María González', items: [{ id: 'seed6', name: 'Plátano Verde', price: 0.60, qty: 10, image: '' }], total: 6.00, date: new Date().toLocaleString('es-PA'), status: 'pendiente' },
+        { id: '1000005', buyerEmail: 'sara@gmail.com', buyerName: 'Sara', items: [{ id: 'seed9', name: 'Naranja Valencia', price: 1.10, qty: 6, image: '' }], total: 6.60, date: new Date().toLocaleString('es-PA'), status: 'en camino', repartidorEmail: 'jose@gmail.com' }
+    ];
+    localStorage.setItem('dachi_orders', JSON.stringify(demoOrders));
+}
+seedDemoData();
+seedDemoOrders();
 function getRegisteredUsers() { return JSON.parse(localStorage.getItem('dachi_usuarios') || '{}'); }
 function saveRegisteredUsers(data) { localStorage.setItem('dachi_usuarios', JSON.stringify(data)); }
 
@@ -528,7 +588,8 @@ const NAV_ADMIN = [
     { id: 'sec-usuarios', label: 'Usuarios', icon: 'group' },
     { id: 'sec-productos', label: 'Productos', icon: 'inventory_2' },
     { id: 'sec-comentarios', label: 'Comentarios', icon: 'forum' },
-    { id: 'sec-logistica-admin', label: 'Logística', icon: 'local_shipping' }
+    { id: 'sec-logistica-admin', label: 'Logística', icon: 'local_shipping' },
+    { id: 'sec-mapa', label: 'Mapa de Rutas', icon: 'map' }
 ];
 const NAV_REPARTIDOR = [
     { id: 'sec-disponibles', label: 'Entregas Disponibles', icon: 'explore' },
@@ -584,6 +645,7 @@ function init() {
         renderAdminProducts();
         renderAdminComments();
         renderAdminLogistics();
+        renderMapaRutas();
     } else {
         document.getElementById('panelTitle').textContent = 'Panel de Logística';
         document.getElementById('roleSubtitle').textContent = 'Gestiona tus entregas de campo a mesa.';
@@ -715,7 +777,107 @@ function deleteComment(productId, date, email) {
     renderAdminComments();
 }
 
-// BLOQUE ADMIN: LOGISTICA (MONITOREO)
+// BLOQUE ADMIN: MAPA DE RUTAS
+const ZONE_COORDS = {
+    'Bocas del Toro': { x: 110, y: 105 },
+    'Chiriquí': { x: 110, y: 205 },
+    'Veraguas': { x: 250, y: 170 },
+    'Coclé': { x: 355, y: 150 },
+    'Herrera': { x: 345, y: 225 },
+    'Los Santos': { x: 400, y: 255 },
+    'Colón': { x: 480, y: 95 },
+    'Panamá Oeste': { x: 530, y: 175 },
+    'Darién': { x: 780, y: 190 }
+};
+let mapaZonaActiva = null;
+
+function zoneOrderStats() {
+    const orders = getOrders();
+    const products = getProducts();
+    const stats = {};
+    Object.keys(ZONE_COORDS).forEach(z => stats[z] = { pendiente: 0, enCamino: 0, total: 0, orders: [] });
+    orders.forEach(o => {
+        if (o.status !== 'pendiente' && o.status !== 'en camino') return;
+        const firstProduct = products.find(p => p.id === o.items[0].id);
+        const zone = (firstProduct && firstProduct.zone) || null;
+        if (!zone || !stats[zone]) return;
+        stats[zone].total++;
+        if (o.status === 'pendiente') stats[zone].pendiente++;
+        else stats[zone].enCamino++;
+        stats[zone].orders.push({ order: o, product: firstProduct });
+    });
+    return stats;
+}
+
+function renderMapaRutas() {
+    const stats = zoneOrderStats();
+    const maxTotal = Math.max(1, ...Object.values(stats).map(s => s.total));
+    const zonasGroup = document.getElementById('mapaZonas');
+    const leyenda = document.getElementById('mapaLeyenda');
+    if (!zonasGroup) return;
+
+    zonasGroup.innerHTML = Object.entries(ZONE_COORDS).map(([zone, pos]) => {
+        const s = stats[zone];
+        const radius = 10 + (s.total / maxTotal) * 16;
+        const active = s.total > 0;
+        const isSelected = mapaZonaActiva === zone;
+        return `
+        <g class="cursor-pointer" onclick="selectMapZone('${zone.replace(/'/g, "\\'")}')">
+            ${active ? `<circle cx="${pos.x}" cy="${pos.y}" r="${radius + 8}" class="fill-secondary-fixed/30"><animate attributeName="r" values="${radius + 6};${radius + 12};${radius + 6}" dur="2s" repeatCount="indefinite"/></circle>` : ''}
+            <circle cx="${pos.x}" cy="${pos.y}" r="${radius}" class="${active ? 'fill-primary' : 'fill-outline-variant'} ${isSelected ? 'stroke-secondary-fixed-dim' : 'stroke-white'}" stroke-width="${isSelected ? 4 : 2}"/>
+            ${s.total > 0 ? `<text x="${pos.x}" y="${pos.y + 4}" text-anchor="middle" class="fill-white text-[11px] font-bold" style="font-family: 'Hanken Grotesk', sans-serif;">${s.total}</text>` : ''}
+            <text x="${pos.x}" y="${pos.y + radius + 16}" text-anchor="middle" class="fill-primary text-[11px] font-bold" style="font-family: 'Hanken Grotesk', sans-serif;">${zone}</text>
+        </g>`;
+    }).join('');
+
+    leyenda.innerHTML = `
+        <div class="flex items-center gap-2 text-label-sm text-on-surface-variant"><span class="w-3 h-3 rounded-full bg-primary inline-block"></span> Con rutas próximas</div>
+        <div class="flex items-center gap-2 text-label-sm text-on-surface-variant"><span class="w-3 h-3 rounded-full bg-outline-variant inline-block"></span> Sin rutas activas</div>
+    `;
+
+    renderMapaListado(stats);
+}
+
+function selectMapZone(zone) {
+    mapaZonaActiva = zone;
+    document.getElementById('mapClearZone').classList.toggle('hidden', !zone);
+    renderMapaRutas();
+}
+
+function renderMapaListado(stats) {
+    const list = document.getElementById('mapaRutasList');
+    const title = document.getElementById('mapaListSubtitle');
+    let entries = [];
+    if (mapaZonaActiva) {
+        title.textContent = mapaZonaActiva;
+        entries = stats[mapaZonaActiva] ? stats[mapaZonaActiva].orders : [];
+    } else {
+        title.textContent = 'Todas las zonas';
+        Object.values(stats).forEach(s => entries.push(...s.orders));
+    }
+
+    if (entries.length === 0) {
+        list.innerHTML = '<p class="text-on-surface-variant text-label-sm py-8 text-center">No hay rutas próximas registradas.</p>';
+        return;
+    }
+
+    list.innerHTML = entries.map(({ order, product }) => {
+        const statusStyle = order.status === 'pendiente' ? 'bg-surface-container-highest text-on-surface-variant' : 'bg-secondary-container text-on-secondary-container';
+        const itemsSummary = order.items.map(i => `${i.qty}x ${i.name}`).join(', ');
+        return `
+        <div class="bg-white rounded-xl p-4 border border-outline-variant/30">
+            <div class="flex justify-between items-start mb-2">
+                <div>
+                    <p class="font-bold text-primary">#${order.id.slice(-6)}</p>
+                    <p class="text-label-sm text-on-surface-variant">${product ? product.zone : 'Zona desconocida'} · ${product ? product.producerName : ''}</p>
+                </div>
+                <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase ${statusStyle}">${order.status}</span>
+            </div>
+            <p class="text-label-sm text-on-surface-variant mb-1">${itemsSummary}</p>
+            <p class="text-label-sm text-on-surface-variant">Cliente: ${order.buyerName}</p>
+        </div>`;
+    }).join('');
+}
 function renderAdminLogistics() {
     const orders = getOrders().filter(o => o.status !== 'pendiente' || o.repartidorEmail);
     const active = getOrders();
