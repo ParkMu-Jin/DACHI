@@ -49,7 +49,7 @@ try {
 <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('img/Fond.png?v=2')"></div>
 <div class="absolute inset-0 bg-black/40 backdrop-blur-[1px] flex flex-col items-center justify-center p-margin-desktop text-white text-center">
 <div class="flex-1 flex flex-col items-center justify-center min-h-0">
-<img alt="DACHI Logo" class="h-48 lg:h-64 xl:h-80 w-auto object-contain brightness-0 invert mb-stack-lg" src="img/DACHI BLANCO.png"/>
+<img alt="DACHI Logo" class="h-48 lg:h-64 xl:h-80 w-auto object-contain brightness-0 invert mb-stack-lg" src="img/LG.png?v=2"/>
 <div class="max-w-md">
 <h1 class="font-headline-sm text-[20px] md:text-headline-sm mb-stack-sm leading-tight opacity-90">Del campo panameño directo a tu mesa, sin intermediarios</h1>
 <p class="font-body-md text-body-md opacity-85 max-w-xs mx-auto">Conectando productores locales con tecnología de vanguardia para garantizar frescura y calidad.</p>
@@ -130,7 +130,7 @@ try {
 </div>
 <div>
 <label class="block font-label-sm text-label-sm text-on-surface-variant mb-3 ml-1">Seleccione su Rol</label>
-<div class="grid grid-cols-2 gap-3">
+<div class="grid grid-cols-3 gap-2">
 <label class="flex flex-col items-center justify-center gap-2 p-3 border border-outline-variant rounded-xl cursor-pointer hover:border-primary has-[:checked]:border-primary has-[:checked]:bg-primary-container/5 transition-all text-center">
 <input class="hidden peer" name="role" required type="radio" value="consumidor"/>
 <span class="material-symbols-outlined text-on-surface-variant peer-checked:text-primary">shopping_basket</span>
@@ -139,6 +139,11 @@ try {
 <label class="flex flex-col items-center justify-center gap-2 p-3 border border-outline-variant rounded-xl cursor-pointer hover:border-primary has-[:checked]:border-primary has-[:checked]:bg-primary-container/5 transition-all text-center">
 <input class="hidden peer" name="role" type="radio" value="productor"/>
 <span class="material-symbols-outlined text-on-surface-variant peer-checked:text-primary">agriculture</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant peer-checked:text-primary">Productor</span>
+</label>
+<label class="flex flex-col items-center justify-center gap-2 p-3 border border-outline-variant rounded-xl cursor-pointer hover:border-primary has-[:checked]:border-primary has-[:checked]:bg-primary-container/5 transition-all text-center">
+<input class="hidden peer" name="role" type="radio" value="distribuidor"/>
+<span class="material-symbols-outlined text-on-surface-variant peer-checked:text-primary">warehouse</span>
 <span class="font-label-sm text-label-sm text-on-surface-variant peer-checked:text-primary">Distribuidor</span>
 </label>
 </div>
@@ -195,7 +200,8 @@ const DEMO_USERS = {
     'ar@gmail.com': { pass: 'dachi2024', role: 'productor', nombre: 'Ar' },
     'roble@dachi.pa': { pass: 'dachi2024', role: 'productor', nombre: 'Finca Los Robles' },
     'boquete@dachi.pa': { pass: 'dachi2024', role: 'productor', nombre: 'Café Boquete Dorado' },
-    'darien@dachi.pa': { pass: 'dachi2024', role: 'productor', nombre: 'Cacao Darién Orgánico' }
+    'darien@dachi.pa': { pass: 'dachi2024', role: 'productor', nombre: 'Cacao Darién Orgánico' },
+    'distribuidora@dachi.pa': { pass: 'dachi2024', role: 'distribuidor', nombre: 'Distribuidora Istmo' }
 };
 
 // BLOQUE REDIRECCIONES POR ROL
@@ -203,7 +209,8 @@ const ROLE_REDIRECT = {
     admin: 'panel.html',
     productor: 'productos.html',
     repartidor: 'panel.html',
-    consumidor: 'home.html'
+    consumidor: 'home.html',
+    distribuidor: 'panel.html'
 };
 
 // BLOQUE USUARIOS REGISTRADOS

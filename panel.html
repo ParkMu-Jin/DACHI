@@ -50,11 +50,37 @@
         .user-menu { transform: translateY(-8px); opacity: 0; pointer-events: none; transition: all .15s ease; }
         .user-menu.open { transform: translateY(0); opacity: 1; pointer-events: auto; }
         .modal-overlay { transition: opacity .2s ease; }
-        html.dark body { background-color:#12140f; color:#e8ebe4; }
-        html.dark .bg-surface, html.dark .bg-surface-container-lowest, html.dark .bg-white, html.dark .bg-surface-container-low, html.dark .bg-surface-container, html.dark .glass-card { background-color:#1b1f19 !important; color:#e8ebe4; }
-        html.dark .text-on-surface, html.dark .text-on-background { color:#e8ebe4 !important; }
-        html.dark .text-on-surface-variant { color:#a9b0a5 !important; }
-        html.dark .border-outline-variant { border-color:#33392f !important; }
+        html.dark body { background-color:#10130f; color:#dfe5dc; }
+        html.dark .glass-container { background: radial-gradient(circle at top left, rgba(185,239,199,0.04), transparent 40%), radial-gradient(circle at bottom right, rgba(255,223,160,0.04), transparent 40%); }
+        html.dark .bg-surface, html.dark .bg-background { background-color:#10130f !important; }
+        html.dark .bg-surface-container-lowest, html.dark .bg-white { background-color:#1c211b !important; }
+        html.dark .bg-surface-container-low { background-color:#20261f !important; }
+        html.dark .bg-surface-container { background-color:#242b23 !important; }
+        html.dark .bg-surface-container-high { background-color:#2b3229 !important; }
+        html.dark .bg-surface-container-highest, html.dark .bg-surface-container-highest\/80 { background-color:#333c30 !important; }
+        html.dark .glass-card { background: rgba(28, 33, 27, 0.75) !important; border-color: rgba(255,255,255,0.06) !important; }
+        html.dark .shadow-forest, html.dark .shadow-forest-active, html.dark .forest-shadow, html.dark .forest-shadow-active { box-shadow: 0px 4px 20px rgba(0,0,0,0.35) !important; }
+        html.dark .text-on-surface, html.dark .text-on-background { color:#e5e9e2 !important; }
+        html.dark .text-on-surface-variant { color:#9fab9a !important; }
+        html.dark .text-primary { color:#8fd6a3 !important; }
+        html.dark .text-on-primary { color:#02160c !important; }
+        html.dark .text-secondary { color:#f6be39 !important; }
+        html.dark .bg-primary { background-color:#3a7a55 !important; }
+        html.dark .bg-primary-fixed { background-color:#1e3b28 !important; }
+        html.dark .bg-primary-fixed\/20, html.dark .bg-primary-fixed\/30 { background-color:rgba(143,214,163,0.12) !important; }
+        html.dark .bg-primary-container\/10 { background-color:rgba(143,214,163,0.08) !important; }
+        html.dark .text-on-primary-fixed { color:#dfe5dc !important; }
+        html.dark .bg-secondary-container { background-color:#5c4200 !important; color:#ffdfa0 !important; }
+        html.dark .text-on-secondary-container { color:#ffdfa0 !important; }
+        html.dark .bg-secondary-fixed, html.dark .bg-secondary-fixed\/30 { background-color:rgba(246,190,57,0.18) !important; }
+        html.dark .border-outline-variant { border-color:#333c30 !important; }
+        html.dark .border-outline { border-color:#4a5546 !important; }
+        html.dark .table-row-hover:hover { background-color: rgba(255,255,255,0.04) !important; }
+        html.dark input, html.dark select, html.dark textarea { background-color:#1c211b !important; color:#e5e9e2 !important; border-color:#333c30 !important; }
+        html.dark input::placeholder, html.dark textarea::placeholder { color:#77826f !important; }
+        html.dark .bg-primary-fixed\/10 { background-color: rgba(143,214,163,0.06) !important; }
+        html.dark ::-webkit-scrollbar-track { background:#10130f !important; }
+        html.dark ::-webkit-scrollbar-thumb { background:#333c30 !important; }
     </style>
 </head>
 <body class="bg-background text-on-background font-body-md min-h-screen glass-container">
@@ -272,13 +298,10 @@
 <span class="material-symbols-outlined text-[18px]">close</span> Ver todas las zonas
 </button>
 </div>
-<p class="text-on-surface-variant text-label-sm mb-4">Cada punto representa una provincia con productores activos. El tamaño indica cuántas rutas próximas tiene. Haz clic en un punto para ver el detalle.</p>
-<div class="rounded-[24px] overflow-hidden border border-outline-variant/30 bg-gradient-to-br from-primary-fixed/10 to-secondary-fixed/10">
-<svg id="mapaSvg" viewBox="0 0 900 320" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto">
-<path d="M60,150 C120,80 220,60 320,100 C400,60 460,50 520,90 C620,60 720,90 840,160 C820,220 720,240 620,210 C560,250 460,260 400,220 C320,260 200,250 130,210 C80,200 50,180 60,150 Z" fill="currentColor" class="text-primary-fixed/25"/>
-<g id="mapaZonas"></g>
-</svg>
-</div>
+<p class="text-on-surface-variant text-label-sm mb-4">Mapa real de Google Maps. Haz clic en una zona para ver sus rutas próximas.</p>
+<div class="rounded-[24px] overflow-hidden border border-outline-variant/30" id="mapaContainer" style="height:420px;"></div>
+<p class="text-[11px] text-on-surface-variant mt-2 hidden" id="mapaKeyNotice">Este es un mapa de referencia. Para activar pines interactivos reales, agrega tu clave de Google Maps en la constante <code>GOOGLE_MAPS_API_KEY</code> dentro del código.</p>
+<div class="flex flex-wrap gap-2 mt-4" id="mapaZonaChips"></div>
 <div class="flex flex-wrap gap-3 mt-4" id="mapaLeyenda"></div>
 </div>
 <div class="glass-card rounded-[32px] shadow-forest p-gutter flex flex-col max-h-[560px]">
@@ -314,6 +337,103 @@
 <span class="material-symbols-outlined text-primary bg-primary-fixed/20 p-2 rounded-xl">history</span> Historial de Entregas
 </h3>
 <div class="space-y-4" id="historyList"></div>
+</section>
+
+<!-- BLOQUE DISTRIBUIDOR: DASHBOARD -->
+<section class="space-y-stack-xl hidden" id="dist-dashboard">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<div class="glass-card p-6 rounded-[24px] shadow-forest">
+<div class="w-12 h-12 rounded-2xl bg-primary-fixed/30 flex items-center justify-center text-primary mb-6"><span class="material-symbols-outlined font-bold">inventory_2</span></div>
+<p class="text-label-sm uppercase tracking-widest text-on-surface-variant font-bold">Productos Disponibles</p>
+<h2 class="text-headline-md font-bold text-primary" id="kpiInventario">0</h2>
+</div>
+<div class="glass-card p-6 rounded-[24px] shadow-forest">
+<div class="w-12 h-12 rounded-2xl bg-secondary-fixed/30 flex items-center justify-center text-secondary mb-6"><span class="material-symbols-outlined font-bold">agriculture</span></div>
+<p class="text-label-sm uppercase tracking-widest text-on-surface-variant font-bold">Productores Asociados</p>
+<h2 class="text-headline-md font-bold text-primary" id="kpiProductores">0</h2>
+</div>
+<div class="glass-card p-6 rounded-[24px] shadow-forest">
+<div class="w-12 h-12 rounded-2xl bg-tertiary-fixed/30 flex items-center justify-center text-tertiary mb-6"><span class="material-symbols-outlined font-bold">local_shipping</span></div>
+<p class="text-label-sm uppercase tracking-widest text-on-surface-variant font-bold">Pedidos en Proceso</p>
+<h2 class="text-headline-md font-bold text-primary" id="kpiPedidosProceso">0</h2>
+</div>
+<div class="glass-card p-6 rounded-[24px] shadow-forest">
+<div class="w-12 h-12 rounded-2xl bg-primary-container/10 flex items-center justify-center border border-primary-container/20 text-primary mb-6"><span class="material-symbols-outlined font-bold">payments</span></div>
+<p class="text-label-sm uppercase tracking-widest text-on-surface-variant font-bold">Valor de Inventario</p>
+<h2 class="text-headline-md font-bold text-primary" id="kpiValorInventario">$0.00</h2>
+</div>
+</div>
+<div class="glass-card rounded-[32px] shadow-forest overflow-hidden">
+<div class="px-gutter py-6"><h3 class="font-headline-sm text-primary text-[22px]">Pedidos Recientes en Proceso</h3></div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low/30 backdrop-blur-sm">
+<tr>
+<th class="px-gutter py-4 font-label-md text-on-surface-variant uppercase tracking-wider text-[11px]">Pedido</th>
+<th class="px-gutter py-4 font-label-md text-on-surface-variant uppercase tracking-wider text-[11px]">Zona</th>
+<th class="px-gutter py-4 font-label-md text-on-surface-variant uppercase tracking-wider text-[11px]">Cliente</th>
+<th class="px-gutter py-4 font-label-md text-on-surface-variant uppercase tracking-wider text-[11px]">Estado</th>
+<th class="px-gutter py-4 font-label-md text-on-surface-variant uppercase tracking-wider text-[11px]">Total</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/30" id="distribuidorOrdersBody"></tbody>
+</table>
+</div>
+</div>
+</section>
+
+<!-- BLOQUE DISTRIBUIDOR: INVENTARIO -->
+<section class="space-y-stack-lg hidden" id="dist-inventario">
+<div class="glass-card rounded-[32px] shadow-forest overflow-hidden">
+<div class="px-gutter py-6"><h3 class="font-headline-sm text-primary text-[22px]">Inventario Disponible por Productor</h3></div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low/30">
+<tr>
+<th class="px-gutter py-4 text-[11px] uppercase tracking-wider text-on-surface-variant font-label-md">Producto</th>
+<th class="px-gutter py-4 text-[11px] uppercase tracking-wider text-on-surface-variant font-label-md">Productor</th>
+<th class="px-gutter py-4 text-[11px] uppercase tracking-wider text-on-surface-variant font-label-md">Zona</th>
+<th class="px-gutter py-4 text-[11px] uppercase tracking-wider text-on-surface-variant font-label-md">Categoría</th>
+<th class="px-gutter py-4 text-[11px] uppercase tracking-wider text-on-surface-variant font-label-md">Cantidad</th>
+<th class="px-gutter py-4 text-[11px] uppercase tracking-wider text-on-surface-variant font-label-md">Precio</th>
+<th class="px-gutter py-4 text-[11px] uppercase tracking-wider text-on-surface-variant font-label-md">Valor Total</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/30" id="inventarioBody"></tbody>
+</table>
+</div>
+</div>
+</section>
+
+<!-- BLOQUE DISTRIBUIDOR: PRODUCTORES -->
+<section class="space-y-stack-lg hidden" id="dist-productores">
+<div class="glass-card rounded-[32px] shadow-forest overflow-hidden">
+<div class="px-gutter py-6"><h3 class="font-headline-sm text-primary text-[22px]">Productores Asociados</h3></div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low/30">
+<tr>
+<th class="px-gutter py-4 text-[11px] uppercase tracking-wider text-on-surface-variant font-label-md">Productor</th>
+<th class="px-gutter py-4 text-[11px] uppercase tracking-wider text-on-surface-variant font-label-md">Correo</th>
+<th class="px-gutter py-4 text-[11px] uppercase tracking-wider text-on-surface-variant font-label-md">Productos Activos</th>
+<th class="px-gutter py-4 text-[11px] uppercase tracking-wider text-on-surface-variant font-label-md">Unidades Disponibles</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/30" id="productoresBody"></tbody>
+</table>
+</div>
+</div>
+</section>
+
+<!-- BLOQUE DISTRIBUIDOR: PEDIDOS -->
+<section class="space-y-stack-lg hidden" id="dist-pedidos">
+<div class="flex items-center justify-between mb-4">
+<h3 class="font-headline-sm text-primary flex items-center gap-3">
+<span class="material-symbols-outlined text-primary bg-primary-fixed/20 p-2 rounded-xl">local_shipping</span> Pedidos en Movimiento
+</h3>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-gutter" id="pedidosDistribuidorList"></div>
+<p class="hidden text-center py-16 text-on-surface-variant" id="noPedidosDistribuidor">No hay pedidos en proceso por el momento.</p>
 </section>
 
 </main>
@@ -413,7 +533,7 @@ function getSession() {
     return raw ? JSON.parse(raw) : null;
 }
 const session = getSession();
-if (!session || (session.role !== 'admin' && session.role !== 'repartidor')) {
+if (!session || (session.role !== 'admin' && session.role !== 'repartidor' && session.role !== 'distribuidor')) {
     const map = { productor: 'productos.html', consumidor: 'home.html' };
     window.location.href = (session && map[session.role]) || 'index.html';
 }
@@ -433,7 +553,8 @@ const DEMO_USERS = {
     'ar@gmail.com': { role: 'productor', nombre: 'Ar' },
     'roble@dachi.pa': { role: 'productor', nombre: 'Finca Los Robles' },
     'boquete@dachi.pa': { role: 'productor', nombre: 'Café Boquete Dorado' },
-    'darien@dachi.pa': { role: 'productor', nombre: 'Cacao Darién Orgánico' }
+    'darien@dachi.pa': { role: 'productor', nombre: 'Cacao Darién Orgánico' },
+    'distribuidora@dachi.pa': { role: 'distribuidor', nombre: 'Distribuidora Istmo' }
 };
 function getProducts() { return JSON.parse(localStorage.getItem('dachi_products') || '[]'); }
 function saveProducts(list) { localStorage.setItem('dachi_products', JSON.stringify(list)); }
@@ -476,7 +597,7 @@ function getRegisteredUsers() { return JSON.parse(localStorage.getItem('dachi_us
 function saveRegisteredUsers(data) { localStorage.setItem('dachi_usuarios', JSON.stringify(data)); }
 
 // BLOQUE ROLES Y PERFIL
-const ROLE_LABELS = { admin: 'PERFIL DE ADMIN', consumidor: 'PERFIL DE CONSUMIDOR', repartidor: 'PERFIL LOGISTICO', productor: 'PERFIL DE PRODUCTOR' };
+const ROLE_LABELS = { admin: 'PERFIL DE ADMIN', consumidor: 'PERFIL DE CONSUMIDOR', repartidor: 'PERFIL LOGISTICO', productor: 'PERFIL DE PRODUCTOR', distribuidor: 'PERFIL DE DISTRIBUIDOR' };
 function getPerfil() { return JSON.parse(localStorage.getItem('dachi_perfil_' + session.email) || '{}'); }
 function savePerfil(p) { localStorage.setItem('dachi_perfil_' + session.email, JSON.stringify(p)); }
 function getAjustes() { return JSON.parse(localStorage.getItem('dachi_ajustes_' + session.email) || '{}'); }
@@ -596,6 +717,12 @@ const NAV_REPARTIDOR = [
     { id: 'sec-activa', label: 'Mi Entrega Activa', icon: 'package_2' },
     { id: 'sec-historial', label: 'Historial', icon: 'history' }
 ];
+const NAV_DISTRIBUIDOR = [
+    { id: 'dist-dashboard', label: 'Dashboard', icon: 'dashboard' },
+    { id: 'dist-inventario', label: 'Inventario', icon: 'inventory_2' },
+    { id: 'dist-productores', label: 'Productores', icon: 'agriculture' },
+    { id: 'dist-pedidos', label: 'Pedidos', icon: 'local_shipping' }
+];
 
 function buildSidebar(items) {
     const nav = document.getElementById('sidebarNav');
@@ -645,8 +772,8 @@ function init() {
         renderAdminProducts();
         renderAdminComments();
         renderAdminLogistics();
-        renderMapaRutas();
-    } else {
+        initMapaReal();
+    } else if (session.role === 'repartidor') {
         document.getElementById('panelTitle').textContent = 'Panel de Logística';
         document.getElementById('roleSubtitle').textContent = 'Gestiona tus entregas de campo a mesa.';
         buildSidebar(NAV_REPARTIDOR);
@@ -654,6 +781,15 @@ function init() {
         renderAvailableDeliveries();
         renderActiveDelivery();
         renderHistory();
+    } else {
+        document.getElementById('panelTitle').textContent = 'Panel de Distribución';
+        document.getElementById('roleSubtitle').textContent = 'Coordina inventario y pedidos entre productores y consumidores.';
+        buildSidebar(NAV_DISTRIBUIDOR);
+        showSection('dist-dashboard');
+        renderDistribuidorDashboard();
+        renderInventario();
+        renderProductores();
+        renderPedidosDistribuidor();
     }
 }
 
@@ -778,18 +914,25 @@ function deleteComment(productId, date, email) {
 }
 
 // BLOQUE ADMIN: MAPA DE RUTAS
+// BLOQUE MAPA REAL DE GOOGLE MAPS
+// Para pines interactivos reales, obtén una clave gratuita en https://console.cloud.google.com/google/maps-apis
+// (Maps JavaScript API) y pégala aquí abajo. Sin clave, se muestra un mapa real de Panamá en modo de referencia.
+const GOOGLE_MAPS_API_KEY = '';
 const ZONE_COORDS = {
-    'Bocas del Toro': { x: 110, y: 105 },
-    'Chiriquí': { x: 110, y: 205 },
-    'Veraguas': { x: 250, y: 170 },
-    'Coclé': { x: 355, y: 150 },
-    'Herrera': { x: 345, y: 225 },
-    'Los Santos': { x: 400, y: 255 },
-    'Colón': { x: 480, y: 95 },
-    'Panamá Oeste': { x: 530, y: 175 },
-    'Darién': { x: 780, y: 190 }
+    'Bocas del Toro': { lat: 9.3400, lng: -82.2500 },
+    'Chiriquí': { lat: 8.4300, lng: -82.4300 },
+    'Veraguas': { lat: 8.1000, lng: -80.9800 },
+    'Coclé': { lat: 8.5200, lng: -80.3600 },
+    'Herrera': { lat: 7.9700, lng: -80.4300 },
+    'Los Santos': { lat: 7.7700, lng: -80.2800 },
+    'Colón': { lat: 9.3590, lng: -79.9010 },
+    'Panamá Oeste': { lat: 8.8800, lng: -79.7800 },
+    'Darién': { lat: 8.4100, lng: -78.1500 }
 };
 let mapaZonaActiva = null;
+let googleMap = null;
+let mapaMarkers = {};
+let mapaModoReal = false;
 
 function zoneOrderStats() {
     const orders = getOrders();
@@ -809,38 +952,85 @@ function zoneOrderStats() {
     return stats;
 }
 
+function initMapaReal() {
+    const container = document.getElementById('mapaContainer');
+    if (!container) return;
+    if (!GOOGLE_MAPS_API_KEY) {
+        container.innerHTML = '<iframe src="https://www.google.com/maps?q=Panama&z=7&output=embed" class="w-full h-full border-0" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>';
+        document.getElementById('mapaKeyNotice').classList.remove('hidden');
+        mapaModoReal = false;
+        renderMapaRutas();
+        return;
+    }
+    window.__onGoogleMapsReady = function () {
+        googleMap = new google.maps.Map(container, {
+            center: { lat: 8.55, lng: -80.5 },
+            zoom: 7,
+            mapTypeControl: false,
+            streetViewControl: false
+        });
+        mapaModoReal = true;
+        renderMapaRutas();
+    };
+    const script = document.createElement('script');
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&callback=__onGoogleMapsReady`;
+    script.async = true;
+    document.head.appendChild(script);
+}
+
 function renderMapaRutas() {
     const stats = zoneOrderStats();
     const maxTotal = Math.max(1, ...Object.values(stats).map(s => s.total));
-    const zonasGroup = document.getElementById('mapaZonas');
+
+    if (mapaModoReal && googleMap) {
+        Object.entries(ZONE_COORDS).forEach(([zone, pos]) => {
+            const s = stats[zone];
+            const active = s.total > 0;
+            const isSelected = mapaZonaActiva === zone;
+            const scale = 8 + (s.total / maxTotal) * 10;
+            const icon = {
+                path: google.maps.SymbolPath.CIRCLE,
+                scale: scale,
+                fillColor: active ? '#2E5339' : '#B7C4B8',
+                fillOpacity: 1,
+                strokeColor: isSelected ? '#D9A441' : '#FFFFFF',
+                strokeWeight: isSelected ? 4 : 2
+            };
+            if (!mapaMarkers[zone]) {
+                const marker = new google.maps.Marker({ position: pos, map: googleMap, label: s.total > 0 ? { text: String(s.total), color: '#fff', fontWeight: 'bold', fontSize: '11px' } : null, title: zone, icon });
+                marker.addListener('click', () => selectMapZone(zone));
+                mapaMarkers[zone] = marker;
+            } else {
+                mapaMarkers[zone].setIcon(icon);
+                mapaMarkers[zone].setLabel(s.total > 0 ? { text: String(s.total), color: '#fff', fontWeight: 'bold', fontSize: '11px' } : null);
+            }
+        });
+    }
+
+    const chips = document.getElementById('mapaZonaChips');
+    if (chips) {
+        chips.innerHTML = Object.keys(ZONE_COORDS).map(zone => {
+            const s = stats[zone];
+            const isSelected = mapaZonaActiva === zone;
+            const active = s.total > 0;
+            return `<button onclick="selectMapZone('${zone.replace(/'/g, "\\'")}')" class="px-3 py-1.5 rounded-full text-label-sm font-bold border transition-all ${isSelected ? 'bg-primary text-on-primary border-primary' : active ? 'bg-primary-fixed/20 text-primary border-primary/30 hover:bg-primary-fixed/40' : 'bg-surface-container-low text-on-surface-variant border-outline-variant/40'}">${zone}${s.total > 0 ? ` · ${s.total}` : ''}</button>`;
+        }).join('');
+    }
+
     const leyenda = document.getElementById('mapaLeyenda');
-    if (!zonasGroup) return;
-
-    zonasGroup.innerHTML = Object.entries(ZONE_COORDS).map(([zone, pos]) => {
-        const s = stats[zone];
-        const radius = 10 + (s.total / maxTotal) * 16;
-        const active = s.total > 0;
-        const isSelected = mapaZonaActiva === zone;
-        return `
-        <g class="cursor-pointer" onclick="selectMapZone('${zone.replace(/'/g, "\\'")}')">
-            ${active ? `<circle cx="${pos.x}" cy="${pos.y}" r="${radius + 8}" class="fill-secondary-fixed/30"><animate attributeName="r" values="${radius + 6};${radius + 12};${radius + 6}" dur="2s" repeatCount="indefinite"/></circle>` : ''}
-            <circle cx="${pos.x}" cy="${pos.y}" r="${radius}" class="${active ? 'fill-primary' : 'fill-outline-variant'} ${isSelected ? 'stroke-secondary-fixed-dim' : 'stroke-white'}" stroke-width="${isSelected ? 4 : 2}"/>
-            ${s.total > 0 ? `<text x="${pos.x}" y="${pos.y + 4}" text-anchor="middle" class="fill-white text-[11px] font-bold" style="font-family: 'Hanken Grotesk', sans-serif;">${s.total}</text>` : ''}
-            <text x="${pos.x}" y="${pos.y + radius + 16}" text-anchor="middle" class="fill-primary text-[11px] font-bold" style="font-family: 'Hanken Grotesk', sans-serif;">${zone}</text>
-        </g>`;
-    }).join('');
-
-    leyenda.innerHTML = `
-        <div class="flex items-center gap-2 text-label-sm text-on-surface-variant"><span class="w-3 h-3 rounded-full bg-primary inline-block"></span> Con rutas próximas</div>
-        <div class="flex items-center gap-2 text-label-sm text-on-surface-variant"><span class="w-3 h-3 rounded-full bg-outline-variant inline-block"></span> Sin rutas activas</div>
-    `;
+    if (leyenda) {
+        leyenda.innerHTML = `
+            <div class="flex items-center gap-2 text-label-sm text-on-surface-variant"><span class="w-3 h-3 rounded-full bg-primary inline-block"></span> Con rutas próximas</div>
+            <div class="flex items-center gap-2 text-label-sm text-on-surface-variant"><span class="w-3 h-3 rounded-full bg-outline-variant inline-block"></span> Sin rutas activas</div>
+        `;
+    }
 
     renderMapaListado(stats);
 }
 
 function selectMapZone(zone) {
-    mapaZonaActiva = zone;
-    document.getElementById('mapClearZone').classList.toggle('hidden', !zone);
+    mapaZonaActiva = mapaZonaActiva === zone ? null : zone;
+    document.getElementById('mapClearZone').classList.toggle('hidden', !mapaZonaActiva);
     renderMapaRutas();
 }
 
@@ -1030,6 +1220,109 @@ function renderHistory() {
             <span class="px-3 py-1 rounded-full text-[11px] font-bold uppercase bg-primary-fixed/60 text-on-primary-fixed">Entregado</span>
         </div>
     `).join('') || '<p class="text-on-surface-variant">Aún no has completado entregas.</p>';
+}
+
+// BLOQUE DISTRIBUIDOR: DASHBOARD
+function renderDistribuidorDashboard() {
+    const products = getProducts().filter(p => p.status === 'active');
+    const orders = getOrders().filter(o => o.status === 'pendiente' || o.status === 'en camino');
+    const producerEmails = new Set(products.map(p => p.producerEmail));
+    const valorInventario = products.reduce((a, p) => a + (parseFloat(p.price) * p.quantity), 0);
+
+    document.getElementById('kpiInventario').textContent = products.length;
+    document.getElementById('kpiProductores').textContent = producerEmails.size;
+    document.getElementById('kpiPedidosProceso').textContent = orders.length;
+    document.getElementById('kpiValorInventario').textContent = `$${valorInventario.toFixed(2)}`;
+
+    const statusColor = { pendiente: 'bg-surface-container-highest/80 text-on-surface-variant', 'en camino': 'bg-secondary-container/80 text-on-secondary-container' };
+    const tbody = document.getElementById('distribuidorOrdersBody');
+    tbody.innerHTML = orders.slice().reverse().slice(0, 8).map(o => {
+        const firstProduct = getProducts().find(p => p.id === o.items[0].id);
+        return `
+        <tr class="table-row-hover transition-colors">
+            <td class="px-gutter py-5 font-bold text-primary">#${o.id.slice(-6)}</td>
+            <td class="px-gutter py-5">${firstProduct ? firstProduct.zone : '—'}</td>
+            <td class="px-gutter py-5">${o.buyerName}</td>
+            <td class="px-gutter py-5"><span class="px-3 py-1 rounded-full text-[11px] font-bold uppercase ${statusColor[o.status] || statusColor.pendiente}">${o.status}</span></td>
+            <td class="px-gutter py-5 font-bold text-primary">$${o.total.toFixed(2)}</td>
+        </tr>`;
+    }).join('') || '<tr><td class="px-gutter py-5 text-on-surface-variant" colspan="5">Sin pedidos en proceso.</td></tr>';
+}
+
+// BLOQUE DISTRIBUIDOR: INVENTARIO
+function renderInventario() {
+    const products = getProducts().filter(p => p.status === 'active');
+    const tbody = document.getElementById('inventarioBody');
+    tbody.innerHTML = products.map(p => `
+        <tr class="table-row-hover transition-colors">
+            <td class="px-gutter py-5 font-bold text-on-surface">${p.name}</td>
+            <td class="px-gutter py-5 text-on-surface-variant">${p.producerName || '—'}</td>
+            <td class="px-gutter py-5 text-on-surface-variant">${p.zone || '—'}</td>
+            <td class="px-gutter py-5 text-on-surface-variant">${p.category || '—'}</td>
+            <td class="px-gutter py-5 text-on-surface-variant">${p.quantity}</td>
+            <td class="px-gutter py-5 font-bold text-primary">$${parseFloat(p.price).toFixed(2)}</td>
+            <td class="px-gutter py-5 font-bold text-primary">$${(parseFloat(p.price) * p.quantity).toFixed(2)}</td>
+        </tr>
+    `).join('') || '<tr><td class="px-gutter py-5 text-on-surface-variant" colspan="7">No hay inventario disponible.</td></tr>';
+}
+
+// BLOQUE DISTRIBUIDOR: PRODUCTORES
+function renderProductores() {
+    const products = getProducts().filter(p => p.status === 'active');
+    const byProducer = {};
+    products.forEach(p => {
+        const key = p.producerEmail || 'desconocido';
+        if (!byProducer[key]) byProducer[key] = { nombre: p.producerName || 'Productor', count: 0, unidades: 0 };
+        byProducer[key].count++;
+        byProducer[key].unidades += p.quantity;
+    });
+    const tbody = document.getElementById('productoresBody');
+    tbody.innerHTML = Object.entries(byProducer).map(([email, d]) => `
+        <tr class="table-row-hover transition-colors">
+            <td class="px-gutter py-5 font-bold text-on-surface">${d.nombre}</td>
+            <td class="px-gutter py-5 text-on-surface-variant">${email}</td>
+            <td class="px-gutter py-5 text-on-surface-variant">${d.count}</td>
+            <td class="px-gutter py-5 text-on-surface-variant">${d.unidades}</td>
+        </tr>
+    `).join('') || '<tr><td class="px-gutter py-5 text-on-surface-variant" colspan="4">No hay productores con inventario activo.</td></tr>';
+}
+
+// BLOQUE DISTRIBUIDOR: PEDIDOS EN MOVIMIENTO
+function renderPedidosDistribuidor() {
+    const orders = getOrders().filter(o => o.status === 'pendiente' || o.status === 'en camino');
+    const products = getProducts();
+    const container = document.getElementById('pedidosDistribuidorList');
+    const noPedidos = document.getElementById('noPedidosDistribuidor');
+
+    if (orders.length === 0) {
+        container.innerHTML = '';
+        noPedidos.classList.remove('hidden');
+        return;
+    }
+    noPedidos.classList.add('hidden');
+
+    container.innerHTML = orders.slice().reverse().map(o => {
+        const firstProduct = products.find(p => p.id === o.items[0].id);
+        const origin = firstProduct ? `${firstProduct.producerName} · ${firstProduct.zone}` : 'Productor DACHI';
+        const itemsSummary = o.items.map(i => `${i.qty}x ${i.name}`).join(', ');
+        const statusStyle = o.status === 'pendiente' ? 'bg-surface-container-highest text-on-surface-variant' : 'bg-secondary-container text-on-secondary-container';
+        return `
+        <div class="glass-card border-l-4 border-l-primary p-gutter rounded-[28px] shadow-forest">
+            <div class="flex justify-between items-start mb-4">
+                <div>
+                    <span class="text-[10px] font-bold text-on-secondary-container bg-secondary-fixed px-3 py-1 rounded-full uppercase tracking-widest">Pedido</span>
+                    <h4 class="font-headline-sm mt-3 text-[20px] text-primary">#${o.id.slice(-6)}</h4>
+                </div>
+                <span class="px-3 py-1 rounded-full text-[11px] font-bold uppercase ${statusStyle}">${o.status}</span>
+            </div>
+            <div class="space-y-2 text-label-sm text-on-surface-variant">
+                <p><span class="font-bold text-on-surface">Origen:</span> ${origin}</p>
+                <p><span class="font-bold text-on-surface">Destino:</span> ${o.buyerName}</p>
+                <p><span class="font-bold text-on-surface">Contenido:</span> ${itemsSummary}</p>
+                <p><span class="font-bold text-on-surface">Total:</span> $${o.total.toFixed(2)}</p>
+            </div>
+        </div>`;
+    }).join('');
 }
 
 window.onload = init;

@@ -56,11 +56,37 @@
         .user-menu { transform: translateY(-8px); opacity: 0; pointer-events: none; transition: all .15s ease; }
         .user-menu.open { transform: translateY(0); opacity: 1; pointer-events: auto; }
         .modal-overlay { transition: opacity .2s ease; }
-        html.dark body { background-color:#12140f; color:#e8ebe4; }
-        html.dark .bg-surface, html.dark .bg-surface-container-lowest, html.dark .bg-white, html.dark .bg-surface-container-low, html.dark .bg-surface-container, html.dark .glass-effect { background-color:#1b1f19 !important; color:#e8ebe4; }
-        html.dark .text-on-surface, html.dark .text-on-background { color:#e8ebe4 !important; }
-        html.dark .text-on-surface-variant { color:#a9b0a5 !important; }
-        html.dark .border-outline-variant { border-color:#33392f !important; }
+        html.dark body { background-color:#10130f; color:#dfe5dc; }
+        html.dark .glass-container { background: radial-gradient(circle at top left, rgba(185,239,199,0.04), transparent 40%), radial-gradient(circle at bottom right, rgba(255,223,160,0.04), transparent 40%); }
+        html.dark .bg-surface, html.dark .bg-background { background-color:#10130f !important; }
+        html.dark .bg-surface-container-lowest, html.dark .bg-white { background-color:#1c211b !important; }
+        html.dark .bg-surface-container-low { background-color:#20261f !important; }
+        html.dark .bg-surface-container { background-color:#242b23 !important; }
+        html.dark .bg-surface-container-high { background-color:#2b3229 !important; }
+        html.dark .bg-surface-container-highest, html.dark .bg-surface-container-highest\/80 { background-color:#333c30 !important; }
+        html.dark .glass-card, html.dark .glass-effect { background: rgba(28, 33, 27, 0.75) !important; border-color: rgba(255,255,255,0.06) !important; }
+        html.dark .shadow-forest, html.dark .shadow-forest-active, html.dark .forest-shadow, html.dark .forest-shadow-active { box-shadow: 0px 4px 20px rgba(0,0,0,0.35) !important; }
+        html.dark .text-on-surface, html.dark .text-on-background { color:#e5e9e2 !important; }
+        html.dark .text-on-surface-variant { color:#9fab9a !important; }
+        html.dark .text-primary { color:#8fd6a3 !important; }
+        html.dark .text-on-primary { color:#02160c !important; }
+        html.dark .text-secondary { color:#f6be39 !important; }
+        html.dark .bg-primary { background-color:#3a7a55 !important; }
+        html.dark .bg-primary-fixed { background-color:#1e3b28 !important; }
+        html.dark .bg-primary-fixed\/20, html.dark .bg-primary-fixed\/30 { background-color:rgba(143,214,163,0.12) !important; }
+        html.dark .bg-primary-container\/10 { background-color:rgba(143,214,163,0.08) !important; }
+        html.dark .text-on-primary-fixed { color:#dfe5dc !important; }
+        html.dark .bg-secondary-container { background-color:#5c4200 !important; color:#ffdfa0 !important; }
+        html.dark .text-on-secondary-container { color:#ffdfa0 !important; }
+        html.dark .bg-secondary-fixed, html.dark .bg-secondary-fixed\/30 { background-color:rgba(246,190,57,0.18) !important; }
+        html.dark .border-outline-variant { border-color:#333c30 !important; }
+        html.dark .border-outline { border-color:#4a5546 !important; }
+        html.dark .table-row-hover:hover { background-color: rgba(255,255,255,0.04) !important; }
+        html.dark input, html.dark select, html.dark textarea { background-color:#1c211b !important; color:#e5e9e2 !important; border-color:#333c30 !important; }
+        html.dark input::placeholder, html.dark textarea::placeholder { color:#77826f !important; }
+        html.dark .bg-primary-fixed\/10 { background-color: rgba(143,214,163,0.06) !important; }
+        html.dark ::-webkit-scrollbar-track { background:#10130f !important; }
+        html.dark ::-webkit-scrollbar-thumb { background:#333c30 !important; }
     </style>
 </head>
 <body class="bg-background">
@@ -343,7 +369,7 @@ function getSession() {
 }
 const session = getSession();
 if (!session || session.role !== 'productor') {
-    const map = { admin: 'panel.html', consumidor: 'home.html', repartidor: 'panel.html' };
+    const map = { admin: 'panel.html', consumidor: 'home.html', repartidor: 'panel.html', distribuidor: 'panel.html' };
     window.location.href = (session && map[session.role]) || 'index.html';
 }
 function logout() {
@@ -353,7 +379,7 @@ function logout() {
 }
 
 // BLOQUE ROLES Y PERFIL
-const ROLE_LABELS = { admin: 'PERFIL DE ADMIN', consumidor: 'PERFIL DE CONSUMIDOR', repartidor: 'PERFIL LOGISTICO', productor: 'PERFIL DE PRODUCTOR' };
+const ROLE_LABELS = { admin: 'PERFIL DE ADMIN', consumidor: 'PERFIL DE CONSUMIDOR', repartidor: 'PERFIL LOGISTICO', productor: 'PERFIL DE PRODUCTOR', distribuidor: 'PERFIL DE DISTRIBUIDOR' };
 function getPerfil() { return JSON.parse(localStorage.getItem('dachi_perfil_' + session.email) || '{}'); }
 function savePerfil(p) { localStorage.setItem('dachi_perfil_' + session.email, JSON.stringify(p)); }
 function getAjustes() { return JSON.parse(localStorage.getItem('dachi_ajustes_' + session.email) || '{}'); }
